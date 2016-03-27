@@ -1,0 +1,21 @@
+{
+  "name": "ethauth-js",
+  "version": "1.0.0",
+  "description": "Simple authentication with an Ethereum address",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha"
+  },
+  "keywords": [
+    "ethereum"
+  ],
+  "license": "MIT",
+  "author": "Dave Bryson",
+  "dependencies": {
+    "base64url": "^1.0.6",
+    "ethereumjs-util": "^4.3.0"
+  },
+  "devDependencies": {
+    "mocha": "^2.4.5"
+  }
+}
