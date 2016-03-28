@@ -3,6 +3,8 @@
 var ethauth = require('../index.js');
 var assert = require('assert');
 
+var bobsToken = "eyJuYW1lIjoiYm9iIiwiY3JlYXRlZCI6MTQ1OTEyNTM2MjU2MH0.eyJ2IjoyNywiciI6IjliOTZhNjU0ZTczNDA3OWU2MTM5YTU1ZjI5ZDE4NWM2MzgyNTkxN2I1ZDUzODFmYTFjMjY1Y2ZkNWFmYmYxYmUiLCJzIjoiMTg1M2U4ODMxZDMwZjM4MGY3MGNmM2ViZGYyY2JkZjc1ZThjNDRhYjU0OTgwMjY0NDUxNjI4NTBjOWU0MmVmNSJ9";
+
 describe("Sign and Validate", (done) => {
   let bob, alice;
 
@@ -30,13 +32,7 @@ describe("Sign and Validate", (done) => {
   });
 
   it('should validate bobs token', (done) => {
-    let sk = ethauth.sha256(bob.password);
-    let token = ethauth.sign(sk, {
-      name: 'bob'
-    });
-    assert(token);
-
-    ethauth.validate(token, (err, result) => {
+    ethauth.validate(bobsToken, (err, result) => {
       assert(err === null);
       assert(result.id, bob.id);
       assert(result.payload.created);
@@ -51,7 +47,6 @@ describe("Sign and Validate", (done) => {
       name: 'alice'
     });
     assert(token);
-
     ethauth.validate(token, (err, result) => {
       assert(err === null);
       assert(result.id, alice.id);
@@ -62,6 +57,14 @@ describe("Sign and Validate", (done) => {
   });
 
   it('should fail on bad token', (done) => {
+    ethauth.validate('bad.token', (err, result) => {
+      assert(err);
+      assert(result === null);
+      done();
+    });
+  });
+
+  it('should fail on bad token without dot', (done) => {
     ethauth.validate('badtoken', (err, result) => {
       assert(err);
       assert(result === null);

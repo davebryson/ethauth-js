@@ -39,13 +39,14 @@ exports.sign = (sk, data) => {
   token.push(encodedPayload);
 
   // Sign it and create token
-  let hash = utils.sha256(encodedPayload);
+  let hash = exports.sha256(encodedPayload);
   let sig = utils.ecsign(hash, secret_key);
   let sigObj = {
     v: sig.v,
     r: sig.r.toString('hex'),
     s: sig.s.toString('hex')
   };
+
   let encodedSignature = base64.encode(JSON.stringify(sigObj));
   token.push(encodedSignature);
 
@@ -61,7 +62,7 @@ exports.validate = (token, callback) => {
   try {
     let parts = token.split('.')
     let sig = JSON.parse(base64.decode(parts[1]))
-    let y = utils.ecrecover(utils.sha256(parts[0]),
+    let y = utils.ecrecover(exports.sha256(parts[0]),
       sig.v, new Buffer(sig.r, 'hex'), new Buffer(sig.s, 'hex'))
     callback(null, {
       payload: JSON.parse(base64.decode(parts[0])),
