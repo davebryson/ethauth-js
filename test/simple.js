@@ -4,6 +4,7 @@ var ethauth = require('../index.js');
 var assert = require('assert');
 
 var bobsToken = "eyJuYW1lIjoiYm9iIiwiY3JlYXRlZCI6MTQ1OTEyNTM2MjU2MH0.eyJ2IjoyNywiciI6IjliOTZhNjU0ZTczNDA3OWU2MTM5YTU1ZjI5ZDE4NWM2MzgyNTkxN2I1ZDUzODFmYTFjMjY1Y2ZkNWFmYmYxYmUiLCJzIjoiMTg1M2U4ODMxZDMwZjM4MGY3MGNmM2ViZGYyY2JkZjc1ZThjNDRhYjU0OTgwMjY0NDUxNjI4NTBjOWU0MmVmNSJ9";
+var pythonToken = "eyJuYW1lIjogImJvYiIsICJjcmVhdGVkIjogMTQ1OTIxMzYxMX0.eyJzIjogIjc5ZDBkMmNhZDA5ZmJkZGU3MDBlZmIyNzI2ZjEzN2RmYWFkYzdlYmQ4YjYwZTdmNWRjZjE1MDU5MTZmN2QxN2EiLCAiciI6ICJjOTEwMGY4NWMwOTdhMDgwMzYwZTVmODYxOThkOTFkZmVhYWE5YzcxMjk3OTBjYWJhM2FkYmU3YTdlMDI0MmZkIiwgInYiOiAyN30";
 
 describe("Sign and Validate", (done) => {
   let bob, alice;
@@ -52,6 +53,16 @@ describe("Sign and Validate", (done) => {
       assert(result.id, alice.id);
       assert(result.payload.created);
       assert(result.payload.name, 'alice');
+      done();
+    });
+  });
+
+  it('should validate a token from the Python impl',(done) => {
+    ethauth.validate(pythonToken, (err, result) => {
+      assert(err === null);
+      assert(result.id, bob.id);
+      assert(result.payload.created);
+      assert(result.payload.name, 'bob');
       done();
     });
   });
